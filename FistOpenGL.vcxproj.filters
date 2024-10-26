@@ -16,6 +16,9 @@
     <Filter Include="Fichiers de ressources\Shaders">
       <UniqueIdentifier>{2936dbcd-c6dc-49c8-8d16-b64d6a411fe6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Texture">
+      <UniqueIdentifier>{c48547e1-60df-4c21-a08c-be7f06a50c9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -37,6 +40,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="stb.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -61,5 +67,16 @@
     <ClInclude Include="VAO.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\include\stb\stb_image.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="theBlock.png">
+      <Filter>Fichiers sources\Texture</Filter>
+    </Image>
   </ItemGroup>
 </Project>
