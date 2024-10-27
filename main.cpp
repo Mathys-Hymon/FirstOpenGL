@@ -1,18 +1,12 @@
 #include<filesystem>
 namespace fs = std::filesystem;
 
-#include <iostream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <stb/stb_image.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include"Texture.h"
-#include "shaderClass.h"
 #include "VBO.h"
 #include "VAO.h"
 #include "EBO.h"
+#include "Camera.h"
 
 
 const unsigned int width = 800;
@@ -93,7 +87,6 @@ int main()
 	VBO1.Unbind();
 	EBO1.Unbind();
 
-	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
 	// Load texture
 
@@ -103,45 +96,22 @@ int main()
 	Texture theBlock((parentDir + texPath + "theBlock.png").c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	theBlock.texUnit(shaderProgram, "tex0", 0);
 
-	// set mesh rotation
-	float rotation = 0.0f;
-	double prevTime = glfwGetTime();
 
 	glEnable(GL_DEPTH_TEST); // Enable depth buffer
+
+	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));  // Create the camera
+	glfwSetWindowUserPointer(window, &camera); // Link the camera to the window
+	glfwSetScrollCallback(window, Camera::scroll_callback);  // set the scroll event to camera
 
 	while (!glfwWindowShouldClose(window)) // Main While loop
 	{
 		glClearColor(0.07f, 0.13f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear the background color and depth
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the background color and depth
 		shaderProgram.Activate();
 
-		double crntTime = glfwGetTime();
+		camera.Inputs(window);
+		camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix"); // Set the metrix in the cam
 
-		if (crntTime - prevTime >= 1 / 60) { // increment mesh rotation
-			rotation += 0.5f;
-			prevTime = crntTime;
-		}
-
-		//Create the matrices
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view  = glm::mat4(1.0f);
-		glm::mat4 proj  = glm::mat4(1.0f);
-
-
-		model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f)); // apply the rotation to the mesh
-		//apply camera effect and perspective
-		view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
-		proj = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f);
-
-		int modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		int viewLoc = glGetUniformLocation(shaderProgram.ID, "view");
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		int projLoc = glGetUniformLocation(shaderProgram.ID, "proj");
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
-
-
-		glUniform1f(uniID, 0.5f);
 		theBlock.Bind();
 		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
