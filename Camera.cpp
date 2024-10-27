@@ -8,18 +8,22 @@ Camera::Camera(int Width, int Height, glm::vec3 Position)
 	position = Position;
 }
 
-void Camera::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+void Camera::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)     // detect when mouse wheel scroll
 {
 	Camera* camera = static_cast<Camera*>(glfwGetWindowUserPointer(window));
 
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-		camera->speed += static_cast<float>(yoffset) * 0.01f;  // Change sensitivity
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+		camera->speed += static_cast<float>(yoffset) * 0.01f;                       // Change sensitivity
 		camera->speed = glm::clamp(camera->speed, camera->minSpeed, camera->maxSpeed);
 		std::cout << "Current speed: " << camera->speed << std::endl;
 	}
+	else 
+	{
+		camera->position += (static_cast<float>(yoffset) * 0.05f) * camera->rotation;
+	}
 }
 
-void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform)
+void Camera::UpdateMatrix(float FOVdeg, float nearPlane, float farPlane)
 {
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
@@ -27,8 +31,15 @@ void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shade
 	view = glm::lookAt(position, position + rotation, upVector);
 	projection = glm::perspective(glm::radians(FOVdeg), (float)width / height, nearPlane, farPlane);
 
-	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(projection * view));
+	cameraMatrix = projection * view;
 }
+
+void Camera::Matrix(Shader& shader, const char* uniform)
+{
+	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
+}
+
+
 
 void Camera::Inputs(GLFWwindow* window)
 {
@@ -65,7 +76,7 @@ void Camera::Inputs(GLFWwindow* window)
 		position += (speed * 0.1f) * -upVector;
 	}
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)                // LOOK AROUND
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)                // LOOK AROUND
 	{
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
@@ -93,7 +104,7 @@ void Camera::Inputs(GLFWwindow* window)
 		glfwSetCursorPos(window, (width / 2), (height / 2));
 	}
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)                // SHOW MOUSE CURSOR
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE)                // SHOW MOUSE CURSOR
 	{
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		firstClick = true;
