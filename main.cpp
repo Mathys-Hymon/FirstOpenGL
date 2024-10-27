@@ -151,9 +151,10 @@ int main()
 	std::string parentDir = (fs::current_path().fs::path::parent_path()).string();
 	std::string texPath = "/FistOpenGL/Resources/";
 
-	Texture theBlock((parentDir + texPath + "theBlock.png").c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	theBlock.texUnit(shaderProgram, "tex0", 0);
-
+	Texture theBlockTex((parentDir + texPath + "planks.png").c_str(), GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
+	theBlockTex.texUnit(shaderProgram, "tex0", 0);
+	Texture theBlockSpec((parentDir + texPath + "planksSpec.png").c_str(), GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
+	theBlockSpec.texUnit(shaderProgram, "tex1", 1);
 
 	glEnable(GL_DEPTH_TEST); // Enable depth buffer
 
@@ -163,7 +164,7 @@ int main()
 
 	while (!glfwWindowShouldClose(window)) // Main While loop
 	{
-		glClearColor(0.07f, 0.13f, 1.0f, 1.0f);
+		glClearColor(0.045f, 0.054f, 0.087f, 1.0f);         // Define the background Color
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the background color and depth
 		 
 		camera.Inputs(window);
@@ -173,7 +174,8 @@ int main()
 		glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.position.x, camera.position.y, camera.position.z);
 		camera.Matrix(shaderProgram, "camMatrix");   //Set the matrix in the camera
 
-		theBlock.Bind();
+		theBlockTex.Bind();
+		theBlockSpec.Bind();
 		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
 
@@ -196,7 +198,8 @@ int main()
 	lightVAO.Delete();
 	lightVBO.Delete();
 	lightEBO.Delete();
-	theBlock.Delete();
+	theBlockTex.Delete();
+	theBlockSpec.Delete();
 	shaderProgram.Delete();
 
 	// Destroy the window when closed

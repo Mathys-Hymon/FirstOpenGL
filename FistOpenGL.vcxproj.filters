@@ -90,5 +90,8 @@
     <Image Include="theBlock.png">
       <Filter>Fichiers sources\Texture</Filter>
     </Image>
+    <Image Include="Resources\theBlockSpec.png">
+      <Filter>Fichiers sources\Texture</Filter>
+    </Image>
   </ItemGroup>
 </Project>
