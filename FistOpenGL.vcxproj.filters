@@ -16,7 +16,7 @@
     <Filter Include="Fichiers de ressources\Shaders">
       <UniqueIdentifier>{2936dbcd-c6dc-49c8-8d16-b64d6a411fe6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\Texture">
+    <Filter Include="Fichiers de ressources\Texture">
       <UniqueIdentifier>{c48547e1-60df-4c21-a08c-be7f06a50c9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -46,6 +46,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -85,13 +88,16 @@
     <ClInclude Include="Camera.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="theBlock.png">
-      <Filter>Fichiers sources\Texture</Filter>
+      <Filter>Fichiers de ressources\Texture</Filter>
     </Image>
     <Image Include="Resources\theBlockSpec.png">
-      <Filter>Fichiers sources\Texture</Filter>
+      <Filter>Fichiers de ressources\Texture</Filter>
     </Image>
   </ItemGroup>
 </Project>

@@ -1,20 +1,25 @@
 #version 330 core
 
-// Outputs colors in RGBA
+	// Outputs colors in RGBA
 out vec4 FragColor;
 
 
-// Inputs the color from the Vertex Shader
-in vec3 color;
 
-// Inputs the texture coordinate from the Vertex Shader
-in vec2 texCoord;
-
-in vec3 Normal;
+	// Import the current Position from the Vertex Shader
 in vec3 crntPos;
 
-uniform sampler2D tex0;                 // Get texture  Unit from the main
-uniform sampler2D tex1;                 // Get specular Unit from the main
+	//Import the Normal from the Vertex Shader
+in vec3 Normal;
+
+	// Import the color from the Vertex Shader
+in vec3 color;
+	
+	// Import the texture coordinate from the Vertex Shader
+in vec2 texCoord;
+
+
+uniform sampler2D diffuse0;                 // Get texture  Unit from the main
+uniform sampler2D specular0;                 // Get specular Unit from the main
 uniform vec4 lightColor;
 uniform vec3 lightPos;
 uniform vec3 camPos;
@@ -41,7 +46,7 @@ vec4 pointLight()
 	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 16);
 	float specular = specAmount * specularLight;
 
-	return (texture(tex0, texCoord) * (diffuse * intensity + ambient) + texture(tex1, texCoord).r * specular * intensity) * lightColor;
+	return (texture(diffuse0, texCoord) * (diffuse * intensity + ambient) + texture(specular0, texCoord).r * specular * intensity) * lightColor;
 }
 
 
@@ -62,7 +67,7 @@ vec4 direcLight()
 	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 16);
 	float specular = specAmount * specularLight;
 
-	return (texture(tex0, texCoord) * (diffuse + ambient) + texture(tex1, texCoord).r * specular) * lightColor;
+	return (texture(diffuse0, texCoord) * (diffuse + ambient) + texture(specular0, texCoord).r * specular) * lightColor;
 }
 
 
@@ -91,7 +96,7 @@ vec4 spotLight()
 	float angle = dot(vec3(0.0f, -1.0f, 0.0f), -lightDirection);
 	float intensity = clamp((angle - outerCone) / (innerCone - outerCone), 0.0f, 1.0f);
 
-	return (texture(tex0, texCoord) * (diffuse * intensity + ambient) + texture(tex1, texCoord).r * specular * intensity) * lightColor;
+	return (texture(diffuse0, texCoord) * (diffuse * intensity + ambient) + texture(specular0, texCoord).r * specular * intensity) * lightColor;
 }
 
 
