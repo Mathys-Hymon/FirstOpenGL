@@ -42,10 +42,10 @@ void Model::loadMesh(unsigned int indMesh)
 
 void Model::TraverseNode(unsigned int nextNode, glm::mat4 matrix)
 {
-	// Current node
+		// Current node
 	json node = JSON["nodes"][nextNode];
 
-	// Get translation if it exists
+		// Get translation if it exists
 	glm::vec3 translation = glm::vec3(0.0f, 0.0f, 0.0f);
 	if (node.find("translation") != node.end())
 	{
@@ -54,7 +54,7 @@ void Model::TraverseNode(unsigned int nextNode, glm::mat4 matrix)
 			transValues[i] = (node["translation"][i]);
 		translation = glm::make_vec3(transValues);
 	}
-	// Get quaternion if it exists
+		// Get quaternion if it exists
 	glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 	if (node.find("rotation") != node.end())
 	{
@@ -67,7 +67,7 @@ void Model::TraverseNode(unsigned int nextNode, glm::mat4 matrix)
 		};
 		rotation = glm::make_quat(rotValues);
 	}
-	// Get scale if it exists
+		// Get scale if it exists
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	if (node.find("scale") != node.end())
 	{
@@ -76,7 +76,7 @@ void Model::TraverseNode(unsigned int nextNode, glm::mat4 matrix)
 			scaleValues[i] = (node["scale"][i]);
 		scale = glm::make_vec3(scaleValues);
 	}
-	// Get matrix if it exists
+		// Get matrix if it exists
 	glm::mat4 matNode = glm::mat4(1.0f);
 	if (node.find("matrix") != node.end())
 	{
@@ -86,20 +86,20 @@ void Model::TraverseNode(unsigned int nextNode, glm::mat4 matrix)
 		matNode = glm::make_mat4(matValues);
 	}
 
-	// Initialize matrices
+		// Initialize matrices
 	glm::mat4 trans = glm::mat4(1.0f);
 	glm::mat4 rot = glm::mat4(1.0f);
 	glm::mat4 sca = glm::mat4(1.0f);
 
-	// Use translation, rotation, and scale to change the initialized matrices
+		// Use translation, rotation, and scale to change the initialized matrices
 	trans = glm::translate(trans, translation);
 	rot = glm::mat4_cast(rotation);
 	sca = glm::scale(sca, scale);
 
-	// Multiply all matrices together
+		// Multiply all matrices together
 	glm::mat4 matNextNode = matrix * matNode * trans * rot * sca;
 
-	// Check if the node contains a mesh and if it does load it
+		// Check if the node contains a mesh and if it does load it
 	if (node.find("mesh") != node.end())
 	{
 		translationsMeshes.push_back(translation);
@@ -110,7 +110,7 @@ void Model::TraverseNode(unsigned int nextNode, glm::mat4 matrix)
 		loadMesh(node["mesh"]);
 	}
 
-	// Check if the node has children, and if it does, apply this function to them with the matNextNode
+		// Check if the node has children, and if it does, apply this function to them with the matNextNode
 	if (node.find("children") != node.end())
 	{
 		for (unsigned int i = 0; i < node["children"].size(); i++)
