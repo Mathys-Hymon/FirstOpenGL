@@ -102,5 +102,5 @@ vec4 spotLight()
 
 void main()
 {
-	FragColor = spotLight();     //apply light depanding of the normal
+	FragColor = direcLight();     //apply light depanding of the normal
 }
