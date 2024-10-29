@@ -69,7 +69,7 @@ int main()
 
 	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));		// Create the camera
 
-	std::string modelPath = "Models/bunny/scene.gltf";
+	std::string modelPath = "Models/map/scene.gltf";
 
 		// Load texture
 	std::cout << contentDir + modelPath << std::endl;
@@ -92,13 +92,15 @@ int main()
 	{
 		glClearColor(0.045f, 0.054f, 0.087f, 1.0f);				    // Define the background Color
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		    // Clear the background color and depth
+		glDepthFunc(GL_LESS);
+
 		 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
 		camera.Inputs(window);
-		camera.UpdateMatrix(45.0f, 0.1f, 100.0f);					//Update the matrix
+		camera.UpdateMatrix(45.0f, 0.1f, 100.0f);					// Update the matrix
 
 		model.Draw(shaderProgram, camera);
 
